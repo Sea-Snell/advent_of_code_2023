@@ -2,7 +2,7 @@ import heapq
 
 if __name__ == "__main__":
     graph = []
-    with open('33.txt', 'r') as f:
+    with open('34.txt', 'r') as f:
         for line in f:
             graph.append(line.strip())
     
@@ -10,7 +10,7 @@ if __name__ == "__main__":
         (1, 0),
         (-1, 0), 
         (0, 1),
-        (0, -1)
+        (0, -1),
     ]
 
     def next_nodes(curr_node):
@@ -20,12 +20,14 @@ if __name__ == "__main__":
             new_y, new_x, new_consecutive = y+dy, x+dx, 1
             if dy == last_dy and dx == last_dx:
                 new_consecutive = num_consecutive+1
-            if new_y >= 0 and new_x >= 0 and new_y < len(graph) and new_x < len(graph[new_y]) and new_consecutive <= 3 and (not (dy == -last_dy and dx == -last_dx)):
+            elif num_consecutive < 4:
+                continue
+            if new_y >= 0 and new_x >= 0 and new_y < len(graph) and new_x < len(graph[new_y]) and new_consecutive <= 10 and (not (dy == -last_dy and dx == -last_dx)):
                 next_nodes.append(((new_y, new_x), (dy, dx), new_consecutive))
         return next_nodes
     
-    states_to_check = {item: False for item in sum([[((len(graph)-1, len(graph[len(graph)-1])-1), direction, i) for direction in directions] for i in range(4)], [])}
-    h = [(0, 0, ((0, 0), (0, 0), 0), None)]
+    states_to_check = {item: False for item in sum([[((len(graph)-1, len(graph[len(graph)-1])-1), direction, i) for direction in directions] for i in range(4, 11)], [])}
+    h = [(0, 0, ((0, 0), (0, 0), 4), None)]
     visited = dict()
     while len(h) > 0:
         curr_cost, curr_dist, curr_node, prev_node = heapq.heappop(h)
